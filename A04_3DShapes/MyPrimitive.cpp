@@ -110,16 +110,36 @@ void MyPrimitive::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivis
 	Init();
 
 	//Your code starts here
-	float fValue = 0.5f;
 	//3--2
 	//|  |
 	//0--1
-	vector3 point0(-fValue, -fValue, fValue); //0
-	vector3 point1(fValue, -fValue, fValue); //1
-	vector3 point2(fValue, fValue, fValue); //2
-	vector3 point3(-fValue, fValue, fValue); //3
 
-	AddQuad(point0, point1, point3, point2);
+	std::vector<vector3> points;
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		double theta = ((double)i / (double)a_nSubdivisions) * 2 * PI;
+		vector3 point(a_fRadius * cos(theta), -a_fHeight / 2, a_fRadius * sin(theta));
+		points.push_back(point);
+	}
+
+	vector3 top(0, a_fHeight / 2, 0);
+	vector3 bottom(0, -a_fHeight / 2, 0);
+
+	for (unsigned int i = 0; i < points.size(); i++)
+	{
+		vector3 first = points.at(i);
+		vector3 second;
+		if (i != points.size() - 1) 
+		{
+			second = points.at(i + 1);
+		}
+		else 
+		{
+			second = points.at(0);
+		}
+		AddQuad(bottom, first, second, top);
+	}
+
+	points.clear();
 
 	//Your code ends here
 	CompileObject(a_v3Color);
@@ -135,16 +155,58 @@ void MyPrimitive::GenerateCylinder(float a_fRadius, float a_fHeight, int a_nSubd
 	Init();
 
 	//Your code starts here
-	float fValue = 0.5f;
 	//3--2
 	//|  |
 	//0--1
-	vector3 point0(-fValue, -fValue, fValue); //0
-	vector3 point1(fValue, -fValue, fValue); //1
-	vector3 point2(fValue, fValue, fValue); //2
-	vector3 point3(-fValue, fValue, fValue); //3
+	
+	std::vector<vector3> topPoints;
+	std::vector<vector3> bottomPoints;
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		double theta = ((double)i / (double)a_nSubdivisions) * 2 * PI;
+		vector3 topPoint(a_fRadius * cos(theta), a_fHeight / 2, a_fRadius * sin(theta));
+		vector3 bottomPoint(a_fRadius * cos(theta), -a_fHeight / 2, a_fRadius * sin(theta));
+		
+		topPoints.push_back(topPoint);
+		bottomPoints.push_back(bottomPoint);
+	}
 
-	AddQuad(point0, point1, point3, point2);
+	vector3 top(0, a_fHeight / 2, 0);
+	vector3 bottom(0, -a_fHeight / 2, 0);
+
+	for (unsigned int i = 0; i < topPoints.size(); i++)
+	{
+		vector3 topFirst = topPoints.at(i);
+		vector3 bottomFirst = bottomPoints.at(i);
+
+		vector3 topSecond;
+		vector3 bottomSecond;
+		if (i != topPoints.size() - 1)
+		{
+			topSecond = topPoints.at(i + 1);
+			bottomSecond = bottomPoints.at(i + 1);
+		}
+		else
+		{
+			topSecond = topPoints.at(0);
+			bottomSecond = bottomPoints.at(0);
+		}
+		
+		// Upper triangle
+		AddVertexPosition(top);
+		AddVertexPosition(topSecond);
+		AddVertexPosition(topFirst);
+
+		// Lower triangle
+		AddVertexPosition(bottomFirst);
+		AddVertexPosition(bottomSecond);
+		AddVertexPosition(bottom);
+
+		// Connecting wall
+		AddQuad(topFirst, topSecond, bottomFirst, bottomSecond);
+	}
+
+	topPoints.clear();
+	bottomPoints.clear();
 
 	//Your code ends here
 	CompileObject(a_v3Color);
@@ -164,12 +226,67 @@ void MyPrimitive::GenerateTube(float a_fOuterRadius, float a_fInnerRadius, float
 	//3--2
 	//|  |
 	//0--1
-	vector3 point0(-fValue, -fValue, fValue); //0
-	vector3 point1(fValue, -fValue, fValue); //1
-	vector3 point2(fValue, fValue, fValue); //2
-	vector3 point3(-fValue, fValue, fValue); //3
+	
+	std::vector<vector3> topInnerPoints;
+	std::vector<vector3> topOuterPoints;
+	std::vector<vector3> bottomInnerPoints;
+	std::vector<vector3> bottomOuterPoints;
+	for (int i = 0; i < a_nSubdivisions; i++) {
+		double theta = ((double)i / (double)a_nSubdivisions) * 2 * PI;
+		vector3 topInnerPoint(a_fInnerRadius * cos(theta), a_fHeight / 2, a_fInnerRadius * sin(theta));
+		vector3 topOuterPoint(a_fOuterRadius * cos(theta), a_fHeight / 2, a_fOuterRadius * sin(theta));
+		vector3 bottomInnerPoint(a_fInnerRadius * cos(theta), -a_fHeight / 2, a_fInnerRadius * sin(theta));
+		vector3 bottomOuterPoint(a_fOuterRadius * cos(theta), -a_fHeight / 2, a_fOuterRadius * sin(theta));
 
-	AddQuad(point0, point1, point3, point2);
+		topInnerPoints.push_back(topInnerPoint);
+		topOuterPoints.push_back(topOuterPoint);
+		bottomInnerPoints.push_back(bottomInnerPoint);
+		bottomOuterPoints.push_back(bottomOuterPoint);
+	}
+
+	for (unsigned int i = 0; i < topInnerPoints.size(); i++)
+	{
+		vector3 topInnerFirst = topInnerPoints.at(i);
+		vector3 topOuterFirst = topOuterPoints.at(i);
+		vector3 bottomInnerFirst = bottomInnerPoints.at(i);
+		vector3 bottomOuterFirst = bottomOuterPoints.at(i);
+
+		vector3 topInnerSecond;		
+		vector3 topOuterSecond;
+		vector3 bottomInnerSecond;
+		vector3 bottomOuterSecond;
+		if (i != topInnerPoints.size() - 1)
+		{
+			topInnerSecond = topInnerPoints.at(i + 1);
+			topOuterSecond = topOuterPoints.at(i + 1);
+			bottomInnerSecond = bottomInnerPoints.at(i + 1);
+			bottomOuterSecond = bottomOuterPoints.at(i + 1);
+		}
+		else
+		{
+			topInnerSecond = topInnerPoints.at(0);
+			topOuterSecond = topOuterPoints.at(0);
+			bottomInnerSecond = bottomInnerPoints.at(0);
+			bottomOuterSecond = bottomOuterPoints.at(0);
+		}
+
+		// Upper quad
+		AddQuad(topInnerFirst, topInnerSecond, topOuterFirst, topOuterSecond);
+
+		// Lower quad
+		AddQuad(bottomOuterFirst, bottomOuterSecond, bottomInnerFirst, bottomInnerSecond);
+
+		// Inner wall
+		AddQuad(bottomInnerFirst, bottomInnerSecond, topInnerFirst, topInnerSecond);
+
+		// Outer wall
+		AddQuad(topOuterFirst, topOuterSecond, bottomOuterFirst, bottomOuterSecond);
+	}
+
+	topInnerPoints.clear();
+	topOuterPoints.clear();
+	bottomInnerPoints.clear();
+	bottomOuterPoints.clear();
 
 	//Your code ends here
 	CompileObject(a_v3Color);
