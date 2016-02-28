@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F1EDF2C3-8663-42FF-89D7-D0C4857D4358}</ProjectGuid>
     <RootNamespace>02_Inheriting_VS15</RootNamespace>
-    <ProjectName>02_Inheriting_VS15</ProjectName>
+    <ProjectName>02_Inheriting</ProjectName>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

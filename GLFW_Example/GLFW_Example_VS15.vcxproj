@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{49647803-64C5-4742-BCB2-C8DC671B25EF}</ProjectGuid>
     <RootNamespace>GLFW_Example_VS15</RootNamespace>
+    <ProjectName>GLFW_Example</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

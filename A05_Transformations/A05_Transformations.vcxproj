@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1EA67B6E-CAF1-4F2A-8FB5-99B5D30E3004}</ProjectGuid>
-    <RootNamespace>03_SFML_Input_VS15</RootNamespace>
-    <ProjectName>03_SFML_Input</ProjectName>
+    <ProjectGuid>{AABA05C7-71CD-4C9B-A52F-78117CDBC72D}</ProjectGuid>
+    <RootNamespace>A05_Transformations</RootNamespace>
+    <ProjectName>A05_Transformations</ProjectName>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -97,11 +97,11 @@
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)_Binary\"
 xcopy "$(SolutionDir)include\GL\bin" "$(SolutionDir)_Binary" /y
-xcopy "$(SolutionDir)include\RE\bin" "$(SolutionDir)_Binary" /y
+xcopy "$(SolutionDir)include\RE\bin\2015" "$(SolutionDir)_Binary" /y
 xcopy "$(SolutionDir)include\SFML\bin\sfml-system-2.dll" "$(SolutionDir)_Binary" /y
 xcopy "$(SolutionDir)include\SFML\bin\sfml-window-2.dll" "$(SolutionDir)_Binary" /y
 mkdir "$(SolutionDir)_Binary\Shaders\"
-xcopy "$(SolutionDir)_Binary\Shaders" "$(SolutionDir)include\RE\Shaders" /y</Command>
+xcopy "$(SolutionDir)include\RE\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Command>
       <Message>Copying files...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -133,11 +133,11 @@ xcopy "$(SolutionDir)_Binary\Shaders" "$(SolutionDir)include\RE\Shaders" /y</Com
       <Command>mkdir "$(SolutionDir)_Binary\"
 copy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)_Binary"
 xcopy "$(SolutionDir)include\GL\bin" "$(SolutionDir)_Binary" /y
-xcopy "$(SolutionDir)include\RE\bin" "$(SolutionDir)_Binary" /y
+xcopy "$(SolutionDir)include\RE\bin\2015" "$(SolutionDir)_Binary" /y
 xcopy "$(SolutionDir)include\SFML\bin\sfml-system-2.dll" "$(SolutionDir)_Binary" /y
 xcopy "$(SolutionDir)include\SFML\bin\sfml-window-2.dll" "$(SolutionDir)_Binary" /y
 mkdir "$(SolutionDir)_Binary\Shaders\"
-xcopy "$(SolutionDir)_Binary\Shaders" "$(SolutionDir)include\RE\Shaders" /y</Command>
+xcopy "$(SolutionDir)include\RE\Shaders" "$(SolutionDir)_Binary\Shaders" /y</Command>
       <Message>Copying files...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>

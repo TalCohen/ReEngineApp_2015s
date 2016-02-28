@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FB51C0AB-6E10-4DEB-9D27-A3C31251A36D}</ProjectGuid>
     <RootNamespace>ModelViewer_VS15</RootNamespace>
-    <ProjectName>ModelViewer_VS15</ProjectName>
+    <ProjectName>ModelViewer</ProjectName>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
