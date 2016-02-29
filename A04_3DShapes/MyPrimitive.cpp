@@ -337,18 +337,63 @@ void MyPrimitive::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a
 
 	Release();
 	Init();
-
+	
 	//Your code starts here
-	float fValue = 0.5f;
+	a_nSubdivisions += 2;
 	//3--2
 	//|  |
 	//0--1
-	vector3 point0(-fValue, -fValue, fValue); //0
-	vector3 point1(fValue, -fValue, fValue); //1
-	vector3 point2(fValue, fValue, fValue); //2
-	vector3 point3(-fValue, fValue, fValue); //3
 
-	AddQuad(point0, point1, point3, point2);
+	//3 = 3 and 3*2
+	//4 = 4 and 4*2
+	
+	std::vector<std::vector<vector3>> points;
+	for (int i = 0; i < a_nSubdivisions * 2; i++) 
+	{
+		// Horizontally
+		std::vector<vector3> innerPoints;
+		double phi = ((double)i / (double)(a_nSubdivisions * 2)) * 2 * PI;
+		for (int j = 0; j < a_nSubdivisions; j++)
+		{
+			// Vertically
+			double theta = ((double)j / (double)a_nSubdivisions) * PI;
+			vector3 point(a_fRadius * cos(theta) * sin(phi), a_fRadius * cos(phi), a_fRadius * sin(theta) * sin(phi));
+			innerPoints.push_back(point);
+		}
+		points.push_back(innerPoints);
+	}
+
+	// Some problem with cosine being even and the way the triangles are drawn not being visible from the correct side.
+	
+	for (unsigned int i = 0; i < points.size(); i++)
+	{
+		for (unsigned int j = 1; j < points.at(i).size() - 1; j++)
+		{
+			vector3 point1 = points.at(i).at(j);
+			vector3 point2 = points.at(i).at(j + 1);
+
+			int index;
+			if (i != points.size() - 1)
+			{
+				index = i + 1;
+			}
+			else
+			{
+				index = 0;
+			}
+
+			vector3 point3 = points.at(index).at(j);
+			vector3 point4 = points.at(index).at(j + 1);
+
+			AddQuad(point1, point2, point3, point4);
+		}
+	}
+
+	for (unsigned int i = 0; i < points.size(); i++)
+	{
+		points.at(i).clear();
+	}
+	points.clear();
 
 	//Your code ends here
 	CompileObject(a_v3Color);
