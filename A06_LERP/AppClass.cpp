@@ -14,6 +14,31 @@ void AppClass::InitVariables(void)
 	m_pMeshMngr->LoadModel("Sorted\\WallEye.bto", "WallEye");
 
 	fDuration = 1.0f;
+
+	m_numPositions = 11;
+	m_currentPositionIndex = 0;
+	m_positions = new vector3[m_numPositions]
+	{
+		vector3(1.0f,-2.0f, 5.0f),
+		vector3(-3.0f,-1.0f, 3.0f),
+		vector3(2.0f,-1.0f, 3.0f),
+		vector3(-2.0f, 0.0f, 0.0f),
+		vector3(3.0f, 0.0f, 0.0f),
+		vector3(-1.0f, 1.0f,-3.0f),
+		vector3(4.0f, 1.0f,-3.0f),
+		vector3(0.0f, 2.0f,-5.0f),
+		vector3(5.0f, 2.0f,-5.0f),
+		vector3(1.0f, 3.0f,-5.0f),
+		vector3(-4.0f,-2.0f, 5.0f)
+	};
+	m_startPosition = m_positions[m_numPositions - 1];
+	m_endPosition = m_positions[m_currentPositionIndex];
+
+	m_spheres = new PrimitiveClass[m_numPositions];
+	for (unsigned int i = 0; i < m_numPositions; i++)
+	{
+		m_spheres[i].GenerateSphere(0.1f, 5, RERED);
+	}
 }
 
 void AppClass::Update(void)
@@ -36,7 +61,21 @@ void AppClass::Update(void)
 #pragma endregion
 
 #pragma region Your Code goes here
-	m_pMeshMngr->SetModelMatrix(IDENTITY_M4, "WallEye");
+	int secondsPassed = static_cast<int>(fRunTime / fDuration);
+	int durationsPassed = secondsPassed % m_numPositions;
+	if (durationsPassed != m_currentPositionIndex)
+	{
+		// A new second has passed!
+		m_currentPositionIndex = durationsPassed;
+		m_startPosition = m_endPosition;
+		m_endPosition = m_positions[m_currentPositionIndex];
+		std::cout << m_currentPositionIndex << std::endl;
+		std::cout << fRunTime - durationsPassed << std::endl;
+	}
+
+	vector3 pos = glm::lerp(m_startPosition, m_endPosition, static_cast<float>(fRunTime - secondsPassed));
+
+	m_pMeshMngr->SetModelMatrix(glm::translate(pos), "WallEye");
 #pragma endregion
 
 #pragma region Does not need changes but feel free to change anything here
@@ -74,6 +113,14 @@ void AppClass::Display(void)
 		m_pMeshMngr->AddGridToQueue(1.0f, REAXIS::XY, REBLUE * 0.75f); //renders the XY grid with a 100% scale
 		break;
 	}
+
+	matrix4 projection = m_pCameraMngr->GetProjectionMatrix();
+	matrix4 view = m_pCameraMngr->GetViewMatrix();
+
+	for (unsigned int i = 0; i < m_numPositions; i++)
+	{
+		m_spheres[i].Render(projection, view, glm::translate(m_positions[i]));
+	}
 	
 	m_pMeshMngr->Render(); //renders the render list
 
@@ -82,5 +129,18 @@ void AppClass::Display(void)
 
 void AppClass::Release(void)
 {
+	if (m_positions != nullptr)
+	{
+		delete[] m_positions;
+		m_positions = nullptr;
+	}
+
+	if (m_spheres != nullptr)
+	{
+		delete[] m_spheres;
+		m_spheres = nullptr;
+
+	}
+
 	super::Release(); //release the memory of the inherited fields
 }
