@@ -65,6 +65,10 @@ void AppClass::ProcessKeyboard(void)
 		else
 			m_v3Rotation += vector3(0.0f, 0.0f,-1.0f);
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
+		m_v3Rotation = vector3(0.0f, 0.0f, 0.0f);
+	}
 #pragma endregion
 
 #pragma region Other Actions

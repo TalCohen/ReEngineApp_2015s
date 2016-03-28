@@ -11,32 +11,15 @@ void AppClass::InitWindow(String a_sWindowName)
 
 void AppClass::InitVariables(void)
 {
+	//Reset the selection to -1, -1
 	m_selection = std::pair<int, int>(-1, -1);
-	//Set the camera at a position other than the default
-	m_pCameraMngr->SetPositionTargetAndView(vector3(0.0f, 2.5f, 12.0f), vector3(0.0f, 2.5f, 11.0f), REAXISY);
-
-	m_pLightMngr->SetColor(REWHITE, 0);
-	m_pLightMngr->SetIntensity(0.1f, 0);
-	m_pLightMngr->SetColor(REWHITE, 1);
-	m_pLightMngr->SetIntensity(0.5f, 1);
-	m_pLightMngr->SetPosition(vector3(0.0f, 1.0f,-1.0f), 1);
-
+	//Set the camera position
+	m_pCameraMngr->SetPositionTargetAndView(
+		vector3(0.0f, 2.5f, 15.0f),//Camera position
+		vector3(0.0f, 2.5f, 0.0f),//What Im looking at
+		REAXISY);//What is up
 	//Load a model onto the Mesh manager
-	//m_pMeshMngr->LoadModel("tests\\Cubev.fbx", "Unikitty");
-	int nCubes = 10;
-	vector3 v3Start(-nCubes/2.0f, 0.0f, -nCubes / 2.0f);
-	m_pMeshMngr->LoadModel("Cube.obj", "ElCubo");
-	m_pMeshMngr->SetShaderProgramByName("ElCubo", "Phong");
-	for (uint n = 0; n < nCubes; n++)
-	{
-		if (v3Start != vector3(0.0f))
-		{
-			String sName = "Cube_" + std::to_string(n);
-			m_pMeshMngr->LoadModel("Cube.obj", sName, false, glm::translate(v3Start));
-			m_pMeshMngr->SetShaderProgramByName(sName, "Phong");
-		}
-		v3Start += vector3(1.0f, 0.0f, 1.0f);
-	}
+	m_pMeshMngr->LoadModel("Lego\\Unikitty.bto", "Unikitty");
 }
 
 void AppClass::Update(void)
@@ -53,7 +36,9 @@ void AppClass::Update(void)
 
 	//Call the arcball method
 	ArcBall();
-	m_pMeshMngr->SetModelMatrix(glm::translate(m_v3Position) * ToMatrix4(m_qArcBall), 0);
+	
+	//Set the model matrix for the first model to be the arcball
+	m_pMeshMngr->SetModelMatrix(ToMatrix4(m_qArcBall), 0);
 	
 	//Adds all loaded instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("ALL");
