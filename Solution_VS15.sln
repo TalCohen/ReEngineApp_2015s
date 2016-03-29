@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ModelViewer", "ModelViewer\ModelViewer_VS15.vcxproj", "{FB51C0AB-6E10-4DEB-9D27-A3C31251A36D}"
 EndProject
@@ -35,6 +35,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "00_Sandbox", "00_Sandbox\00_Sandbox_VS15.vcxproj", "{F5D6D2E1-6FFD-402B-8EE3-DED4FE407028}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E08_Gimbal_Lock", "E08_Gimbal Lock\E08_Gimbal Lock.vcxproj", "{FCF38D13-439E-4DEC-BB89-2BB6455922AD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E10_Projections", "E10_Projections\E10_Projections.vcxproj", "{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -174,6 +176,12 @@ Global
 		{FCF38D13-439E-4DEC-BB89-2BB6455922AD}.Release|x64.ActiveCfg = Release|Win32
 		{FCF38D13-439E-4DEC-BB89-2BB6455922AD}.Release|x86.ActiveCfg = Release|Win32
 		{FCF38D13-439E-4DEC-BB89-2BB6455922AD}.Release|x86.Build.0 = Release|Win32
+		{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}.Debug|x64.ActiveCfg = Debug|Win32
+		{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}.Debug|x86.ActiveCfg = Debug|Win32
+		{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}.Debug|x86.Build.0 = Debug|Win32
+		{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}.Release|x64.ActiveCfg = Release|Win32
+		{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}.Release|x86.ActiveCfg = Release|Win32
+		{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
