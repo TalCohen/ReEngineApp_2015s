@@ -25,13 +25,8 @@ void AppClass::Update(void)
 	if (m_bFPC == true)
 		CameraRotation();
 
-	//Rotation matrices
-	matrix4 rotX = glm::rotate(IDENTITY_M4, m_v3Orientation.x, REAXISX);
-	matrix4 rotY = glm::rotate(IDENTITY_M4, m_v3Orientation.y, REAXISY);
-	matrix4 rotZ = glm::rotate(IDENTITY_M4, m_v3Orientation.z, REAXISZ);
-
 	//linear combination
-	m_mToWorld = rotX * rotY * rotZ;
+	m_mToWorld = glm::mat4_cast(m_v3Orientation);
 
 	//Setting the model matrix
 	m_pMeshMngr->SetModelMatrix(m_mToWorld, "Steve");
