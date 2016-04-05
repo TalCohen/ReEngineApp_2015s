@@ -12,21 +12,34 @@ void AppClass::InitVariables(void)
 	m_pMesh = new MyMesh();
 	
 	//Creating the Mesh points
-	m_pMesh->AddVertexPosition(vector3(-1.0f, -1.0f, 0.0f));
+	m_pMesh->AddVertexPosition(vector3(-3.0f, 0.0f, 0.0f));
+	m_pMesh->AddVertexColor(REGREEN);
+	m_pMesh->AddVertexPosition(vector3(3.0f, 0.0f, 0.0f));
 	m_pMesh->AddVertexColor(RERED);
-	m_pMesh->AddVertexPosition(vector3( 1.0f, -1.0f, 0.0f));
-	m_pMesh->AddVertexColor(RERED);
-	m_pMesh->AddVertexPosition(vector3(-1.0f,  1.0f, 0.0f));
-	m_pMesh->AddVertexColor(RERED);
-	m_pMesh->AddVertexPosition(vector3(-1.0f,  1.0f, 0.0f));
+	m_pMesh->AddVertexPosition(vector3(0.0f,  sqrt(2), 0.0f));
+	m_pMesh->AddVertexColor(REBLUE);
+	/*m_pMesh->AddVertexPosition(vector3(-1.0f,  1.0f, 0.0f));
 	m_pMesh->AddVertexColor(REBLUE);
 	m_pMesh->AddVertexPosition(vector3(1.0f, -1.0f, 0.0f));
 	m_pMesh->AddVertexColor(REBLUE);
 	m_pMesh->AddVertexPosition(vector3( 1.0f, 1.0f, 0.0f));
-	m_pMesh->AddVertexColor(REBLUE);
+	m_pMesh->AddVertexColor(REBLUE);*/
 
 	//Compiling the mesh
 	m_pMesh->CompileOpenGL3X();
+
+	//Initializing the array
+	m_nObjects = 10000;
+	
+	// We need 16 floats for each object (each matrix has 16 floats)
+	m_fMatrixArray = new float[m_nObjects * 16];
+
+	//Initializing the whole spaces to the position at the origin just to play it safe
+	for (uint n = 0; n < m_nObjects; n++)
+	{
+		const float* m4MVP = glm::value_ptr(glm::translate(vector3(n*2, 0, 0)));
+		memcpy(&m_fMatrixArray[n * 16], m4MVP, 16 * sizeof(float));
+	}
 }
 
 void AppClass::Update(void)
@@ -63,7 +76,7 @@ void AppClass::Display(void)
 	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
 	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
 
-	m_pMesh->Render(m4Projection, m4View, IDENTITY_M4);//Rendering nObjects
+	m_pMesh->RenderList(m4Projection, m4View, m_fMatrixArray, m_nObjects);//Rendering nObjects
 
 	m_pMeshMngr->Render();
 
