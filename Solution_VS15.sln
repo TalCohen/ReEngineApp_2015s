@@ -38,6 +38,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E08_Gimbal_Lock", "E08_Gimb
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E10_Projections", "E10_Projections\E10_Projections.vcxproj", "{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "E11_Sierpinski", "E11_Sierpinski\E11_Sierpinski.vcxproj", "{4965C0BB-DC2D-4C76-B565-2E5C77F75BDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -182,6 +184,12 @@ Global
 		{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}.Release|x64.ActiveCfg = Release|Win32
 		{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}.Release|x86.ActiveCfg = Release|Win32
 		{9B6650A4-8EB9-4CBC-A25C-10726F0BD80D}.Release|x86.Build.0 = Release|Win32
+		{4965C0BB-DC2D-4C76-B565-2E5C77F75BDD}.Debug|x64.ActiveCfg = Debug|Win32
+		{4965C0BB-DC2D-4C76-B565-2E5C77F75BDD}.Debug|x86.ActiveCfg = Debug|Win32
+		{4965C0BB-DC2D-4C76-B565-2E5C77F75BDD}.Debug|x86.Build.0 = Debug|Win32
+		{4965C0BB-DC2D-4C76-B565-2E5C77F75BDD}.Release|x64.ActiveCfg = Release|Win32
+		{4965C0BB-DC2D-4C76-B565-2E5C77F75BDD}.Release|x86.ActiveCfg = Release|Win32
+		{4965C0BB-DC2D-4C76-B565-2E5C77F75BDD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -27,6 +27,7 @@ void AppClass::ProcessKeyboard(void)
 	//F2 Controllers
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2))
 	{
+		m_fTemp += 0.1f;
 	}
 
 	//F3 Controllers
