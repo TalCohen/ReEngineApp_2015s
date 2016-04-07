@@ -93,6 +93,11 @@ public:
 	OUTPUT: ---
 	*/
 	virtual void WriteConfig(void) final {}
+
+private:
+	void CalculatePascal(int numRows);
+	long long Factorial(int n);
+	long long Sum(int n);
 };
 
 #endif //__APPLICATION_H_

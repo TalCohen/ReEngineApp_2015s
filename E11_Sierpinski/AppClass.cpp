@@ -1,4 +1,7 @@
 #include "AppClass.h"
+
+#define DEPTH 5
+
 void AppClass::InitWindow(String a_sWindowName)
 {
 	//Using Base InitWindow method
@@ -7,39 +10,30 @@ void AppClass::InitWindow(String a_sWindowName)
 
 void AppClass::InitVariables(void)
 {
-	m_pCameraMngr->SetPositionTargetAndView(vector3(0.0f, 0.0f, 15.0f), vector3(0.0f, 0.0f, 0.0f), REAXISY);
-
 	m_pMesh = new MyMesh();
-	
+
 	//Creating the Mesh points
-	m_pMesh->AddVertexPosition(vector3(-3.0f, 0.0f, 0.0f));
+	m_pMesh->AddVertexPosition(vector3(-1.0f, 0.0f, 0.0f));
 	m_pMesh->AddVertexColor(REGREEN);
-	m_pMesh->AddVertexPosition(vector3(3.0f, 0.0f, 0.0f));
+	m_pMesh->AddVertexPosition(vector3(1.0f, 0.0f, 0.0f));
 	m_pMesh->AddVertexColor(RERED);
-	m_pMesh->AddVertexPosition(vector3(0.0f,  sqrt(2), 0.0f));
+	m_pMesh->AddVertexPosition(vector3(0.0f, sqrt(3), 0.0f));
 	m_pMesh->AddVertexColor(REBLUE);
-	/*m_pMesh->AddVertexPosition(vector3(-1.0f,  1.0f, 0.0f));
-	m_pMesh->AddVertexColor(REBLUE);
-	m_pMesh->AddVertexPosition(vector3(1.0f, -1.0f, 0.0f));
-	m_pMesh->AddVertexColor(REBLUE);
-	m_pMesh->AddVertexPosition(vector3( 1.0f, 1.0f, 0.0f));
-	m_pMesh->AddVertexColor(REBLUE);*/
 
 	//Compiling the mesh
 	m_pMesh->CompileOpenGL3X();
 
+	int numRows = pow(2, (DEPTH-1));
+
+	m_pCameraMngr->SetPositionTargetAndView(vector3(0.0f, -numRows/2, 10.0f * DEPTH), vector3(0.0f, -numRows/2, 0.0f), REAXISY);
+
 	//Initializing the array
-	m_nObjects = 10000;
-	
+	m_nObjects = Sum(numRows);
+
 	// We need 16 floats for each object (each matrix has 16 floats)
 	m_fMatrixArray = new float[m_nObjects * 16];
 
-	//Initializing the whole spaces to the position at the origin just to play it safe
-	for (uint n = 0; n < m_nObjects; n++)
-	{
-		const float* m4MVP = glm::value_ptr(glm::translate(vector3(n*2, 0, 0)));
-		memcpy(&m_fMatrixArray[n * 16], m4MVP, 16 * sizeof(float));
-	}
+	CalculatePascal(numRows);
 }
 
 void AppClass::Update(void)
@@ -92,4 +86,44 @@ void AppClass::Release(void)
 		m_pMesh = nullptr;
 	}
 	super::Release();
+}
+
+void AppClass::CalculatePascal(int numRows)
+{
+	int count = 0;
+	for (int i = 0; i < numRows; i++)
+	{
+		for (int j = 0; j <= i; j++)
+		{
+			long long n = Factorial(i) / (Factorial(j) * Factorial(i - j));
+			if (n % 2 == 1)
+			{
+				// If it's odd, we can draw it.
+				const float* m4MVP = glm::value_ptr(glm::translate(vector3((j * 2) - i, -i*sqrt(3), 0)));
+				memcpy(&m_fMatrixArray[count * 16], m4MVP, 16 * sizeof(float));
+				count++;
+			}
+			std::cout << n << std::endl;
+		}
+	}
+}
+
+long long AppClass::Factorial(int n)
+{
+	if (n == 0)
+	{
+		return 1;
+	}
+
+	return n * Factorial(n - 1);
+}
+
+long long AppClass::Sum(int n)
+{
+	if (n == 0)
+	{
+		return 0;
+	}
+	
+	return n + Sum(n - 1);
 }
