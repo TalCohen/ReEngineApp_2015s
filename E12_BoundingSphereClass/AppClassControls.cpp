@@ -47,16 +47,16 @@ void AppClass::ProcessKeyboard(void)
 	if (bModifier)
 		fSpeed *= 10.0f;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		m_v3O1.x -= 0.1f;
+		m_pSphere1->UpdatePosition(vector3(-0.1f, 0.0f, 0.0f));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		m_v3O1.x += 0.1f;
+		m_pSphere1->UpdatePosition(vector3(0.1f, 0.0f, 0.0f));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		m_v3O1.y -= 0.1f;
+		m_pSphere1->UpdatePosition(vector3(0.0f, -0.1f, 0.0f));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		m_v3O1.y += 0.1f;
+		m_pSphere1->UpdatePosition(vector3(0.0f, 0.1f, 0.0f));
 #pragma endregion
 
 #pragma region Other Actions

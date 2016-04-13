@@ -9,13 +9,14 @@ Date: 2015/10
 
 
 //System Class
-class MyBoundingSphereClass
+class MyBoundingSphereClass : public PrimitiveClass
 {
 	float m_fRadius = 0.0f; //Radius of the Bounding Sphere
 	matrix4 m_m4ToWorld = IDENTITY_M4; //Matrix that will take us from local to world coordinate
 	vector3 m_v3Center = vector3(0.0f); //Will store the center point of the Sphere Class
 	vector3 m_v3Min = vector3(0.0f); //Will store the minimum vector of the Sphere Class
 	vector3 m_v3Max = vector3(0.0f); //Will store the maximum vector of the Sphere Class
+	vector3 m_v3GlobalPosition = vector3(0.0f); //Will store global position of the Sphere Class
 
 public:
 	/*
@@ -81,6 +82,9 @@ public:
 	*/
 	float GetRadius(void);
 
+	vector3 GetPosition(void); // Gets the global postion of the sphere
+	matrix4 GetModelMatrix(void); // Gets the model matrix of the sphere
+
 	/*
 	 IsColliding
 	USAGE: Asks if there is a collision with another Bounding sphere Object
@@ -89,7 +93,8 @@ public:
 	OUTPUT: bool -> check of the collision
 	*/
 	bool IsColliding(MyBoundingSphereClass* const a_pOther);
-	
+
+	void UpdatePosition(vector3 v3Input); // will update the position of this bounding sphere in global space
 private:
 	/*
 	 Release

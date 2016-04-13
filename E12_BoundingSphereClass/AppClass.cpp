@@ -11,84 +11,24 @@ void AppClass::InitWindow(String a_sWindowName)
 
 void AppClass::InitVariables(void)
 {
-	//Initialize positions
-	m_v3O1 = vector3(-2.5f, 0.0f, 0.0f);
-	m_v3O2 = vector3(2.5f, 0.0f, 0.0f);
-
 	//Load Models
 	m_pMeshMngr->LoadModel("Minecraft\\Steve.obj", "Steve");
 	m_pMeshMngr->LoadModel("Minecraft\\Creeper.obj", "Creeper");
 
 	std::vector<vector3> vertexList = m_pMeshMngr->GetVertexList("Steve");
-
-	uint nVertexCount = vertexList.size();
-
-	vector3 v3Min;
-	vector3 v3Max;
-
-	if (nVertexCount > 0)
-	{
-		v3Min = vertexList[0];
-		v3Max = vertexList[0];
-	}
-
-	for (uint i = 0; i < nVertexCount; i++)
-	{
-		if (vertexList[i].x > v3Max.x)
-			v3Max.x = vertexList[i].x;
-		else if (vertexList[i].x < v3Min.x)
-			v3Min.x = vertexList[i].x;
-
-		if (vertexList[i].y > v3Max.y)
-			v3Max.y = vertexList[i].y;
-		else if (vertexList[i].y < v3Min.y)
-			v3Min.y = vertexList[i].y;
-
-		if (vertexList[i].z > v3Max.z)
-			v3Max.z = vertexList[i].z;
-		else if (vertexList[i].z < v3Min.z)
-			v3Min.z = vertexList[i].z;
-	}
-
-	m_v3Center1 = (v3Max + v3Min)/2.0f;
-	m_fRadius1 = glm::distance(m_v3Center1, v3Max);
-
-	m_pSphere1 = new PrimitiveClass();
-	m_pSphere1->GenerateSphere(m_fRadius1, 10, REGREEN);
+	m_pSphere1 = new MyBoundingSphereClass(vertexList);
 
 	//Creeper
 	vertexList = m_pMeshMngr->GetVertexList("Creeper");
-	nVertexCount = vertexList.size();
+	m_pSphere2 = new MyBoundingSphereClass(vertexList);
 
-	if (nVertexCount > 0)
-	{
-		v3Min = vertexList[0];
-		v3Max = vertexList[0];
-	}
+	//Initialize positions
+	m_pSphere1->UpdatePosition(vector3(-2.5f, 0.0f, 0.0f));
+	m_pSphere2->UpdatePosition(vector3(2.5f, 0.0f, 0.0f));
 
-	for (uint i = 0; i < nVertexCount; i++)
-	{
-		if (vertexList[i].x > v3Max.x)
-			v3Max.x = vertexList[i].x;
-		else if (vertexList[i].x < v3Min.x)
-			v3Min.x = vertexList[i].x;
-
-		if (vertexList[i].y > v3Max.y)
-			v3Max.y = vertexList[i].y;
-		else if (vertexList[i].y < v3Min.y)
-			v3Min.y = vertexList[i].y;
-
-		if (vertexList[i].z > v3Max.z)
-			v3Max.z = vertexList[i].z;
-		else if (vertexList[i].z < v3Min.z)
-			v3Min.z = vertexList[i].z;
-	}
-
-	m_v3Center2 = (v3Max + v3Min) / 2.0f;
-	m_fRadius2 = glm::distance(m_v3Center2, v3Max);
-
-	m_pSphere2 = new PrimitiveClass();
-	m_pSphere2->GenerateSphere(m_fRadius2, 10, REGREEN);
+	// Set model matrices
+	m_pSphere1->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Steve"));
+	m_pSphere2->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Creeper"));
 }
 
 void AppClass::Update(void)
@@ -106,13 +46,11 @@ void AppClass::Update(void)
 	ArcBall();
 
 	//Set the model matrices for both objects and Bounding Spheres
-	m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O1) * ToMatrix4(m_qArcBall), "Steve");
-	m_pMeshMngr->SetModelMatrix(glm::translate(m_v3O2), "Creeper");
+	m_pMeshMngr->SetModelMatrix(glm::translate(m_pSphere1->GetPosition()) * ToMatrix4(m_qArcBall), "Steve");
+	m_pMeshMngr->SetModelMatrix(glm::translate(m_pSphere2->GetPosition()), "Creeper");
 
 	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
 	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
-
-	
 
 	//Adds all loaded instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("ALL");
@@ -121,23 +59,21 @@ void AppClass::Update(void)
 	int nFPS = m_pSystem->GetFPS();
 
 	//Collision check goes here
-	vector3 v3Temp = vector3(m_m4Steve * vector4( m_v3Center1, 1.0f));
-	vector3 v3Temp1 = vector3(m_m4Creeper * vector4(m_v3Center2, 1.0f));
-	bool bAreColliding = false;
-	if(glm::distance(v3Temp, v3Temp1) < m_fRadius1 + m_fRadius2)
-		bAreColliding = true;
+	vector3 v3Temp = vector3(m_m4Steve * vector4( m_pSphere1->GetCenter(), 1.0f));
+	//vector3 v3Temp1 = vector3(m_m4Creeper * vector4(m_pSphere2->GetCenter(), 1.0f));
+	bool bAreColliding = m_pSphere1->IsColliding(m_pSphere2);
 
-	m_m4Steve = m_pMeshMngr->GetModelMatrix("Steve") * glm::translate(m_v3Center1);
+	m_m4Steve = m_pMeshMngr->GetModelMatrix("Steve") * glm::translate(m_pSphere1->GetCenter());
 	if(bAreColliding)
-		m_pMeshMngr->AddSphereToQueue(m_m4Steve * glm::scale(vector3(m_fRadius1 * 2.0f)), RERED, WIRE);
+		m_pMeshMngr->AddSphereToQueue(m_m4Steve * glm::scale(vector3(m_pSphere1->GetRadius() * 2.0f)), RERED, WIRE);
 	else
-		m_pMeshMngr->AddSphereToQueue(m_m4Steve * glm::scale(vector3(m_fRadius1 * 2.0f)), REGREEN, WIRE);
+		m_pMeshMngr->AddSphereToQueue(m_m4Steve * glm::scale(vector3(m_pSphere1->GetRadius() * 2.0f)), REWHITE, WIRE);
 
-	m_m4Creeper = m_pMeshMngr->GetModelMatrix("Creeper") * glm::translate(m_v3Center2);
+	m_m4Creeper = m_pMeshMngr->GetModelMatrix("Creeper") * glm::translate(m_pSphere2->GetCenter());
 	if (bAreColliding)
-		m_pMeshMngr->AddSphereToQueue(m_m4Creeper * glm::scale(vector3(m_fRadius2 * 2.0f)), RERED, WIRE);
+		m_pMeshMngr->AddSphereToQueue(m_m4Creeper * glm::scale(vector3(m_pSphere2->GetRadius() * 2.0f)), RERED, WIRE);
 	else
-		m_pMeshMngr->AddSphereToQueue(m_m4Creeper * glm::scale(vector3(m_fRadius2 * 2.0f)), REGREEN, WIRE);
+		m_pMeshMngr->AddSphereToQueue(m_m4Creeper * glm::scale(vector3(m_pSphere2->GetRadius() * 2.0f)), REWHITE, WIRE);
 
 	m_pMeshMngr->Print("x:" + std::to_string(v3Temp.x ) + " ", RERED);
 	m_pMeshMngr->Print("y:" + std::to_string(v3Temp.y) + " ", RERED);
@@ -180,7 +116,7 @@ void AppClass::Display(void)
 
 	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
 	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
-	matrix4 m4Model = m_pMeshMngr->GetModelMatrix("Steve") * glm::translate(m_v3Center1);
+	matrix4 m4Model = m_pMeshMngr->GetModelMatrix("Steve") * glm::translate(m_pSphere1->GetCenter());
 
 	m_pSphere1->Render(m4Projection, m4View, m4Model);
 
@@ -188,7 +124,7 @@ void AppClass::Display(void)
 
 	m4Projection = m_pCameraMngr->GetProjectionMatrix();
 	m4View = m_pCameraMngr->GetViewMatrix();
-	m4Model = m_pMeshMngr->GetModelMatrix("Creeper") * glm::translate(m_v3Center2);
+	m4Model = m_pMeshMngr->GetModelMatrix("Creeper") * glm::translate(m_pSphere2->GetCenter());
 
 	m_pSphere1->Render(m4Projection, m4View, m4Model);
 	
