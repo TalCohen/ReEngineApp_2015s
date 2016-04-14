@@ -95,3 +95,4 @@ bool MyBoundingSphereClass::IsColliding(MyBoundingSphereClass* const a_pOther)
 {
 	return glm::distance(m_v3GlobalPosition, a_pOther->GetPosition()) < m_fRadius + a_pOther->GetRadius();
 }
+

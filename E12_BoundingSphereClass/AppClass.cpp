@@ -29,6 +29,9 @@ void AppClass::InitVariables(void)
 	// Set model matrices
 	m_pSphere1->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Steve"));
 	m_pSphere2->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Creeper"));
+
+	m_pBox1 = new MyBoundingCubeClass(m_pMeshMngr->GetVertexList("Steve"));
+	m_pBox2 = new MyBoundingCubeClass(m_pMeshMngr->GetVertexList("Creeper"));
 }
 
 void AppClass::Update(void)
@@ -49,9 +52,28 @@ void AppClass::Update(void)
 	m_pMeshMngr->SetModelMatrix(glm::translate(m_pSphere1->GetPosition()) * ToMatrix4(m_qArcBall), "Steve");
 	m_pMeshMngr->SetModelMatrix(glm::translate(m_pSphere2->GetPosition()), "Creeper");
 
-	matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix();
-	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
+	m_pBox1->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Steve"));
+	m_pBox2->SetModelMatrix(m_pMeshMngr->GetModelMatrix("Creeper"));
 
+	bool isColliding = m_pBox1->IsColliding(m_pBox2);
+
+	if (isColliding)
+	{
+		m_pMeshMngr->AddCubeToQueue(
+			glm::translate(vector3(m_pBox1->GetCenterG())) *
+			glm::scale(vector3(m_pBox1->GetSize())), RERED, SOLID);
+		m_pMeshMngr->AddCubeToQueue(glm::translate(vector3(m_pBox2->GetCenterG()))  *
+			glm::scale(vector3(m_pBox2->GetSize())), RERED, SOLID);
+	}
+	else
+	{
+		m_pMeshMngr->AddCubeToQueue(
+			glm::translate(vector3(m_pBox1->GetCenterG())) *
+			glm::scale(vector3(m_pBox1->GetSize())), REGREEN, WIRE);
+		m_pMeshMngr->AddCubeToQueue(glm::translate(vector3(m_pBox2->GetCenterG()))  *
+			glm::scale(vector3(m_pBox2->GetSize())), REGREEN, WIRE);
+	}
+	
 	//Adds all loaded instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("ALL");
 
@@ -84,10 +106,7 @@ void AppClass::Update(void)
 	printf("FPS: %d            \r", nFPS);//print the Frames per Second
 	//Print info on the screen
 	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), REYELLOW);
-	if (bAreColliding)
-		m_pMeshMngr->PrintLine("They are colliding! >_<", RERED);
-	else
-		m_pMeshMngr->PrintLine("They are not colliding! =)", REGREEN);
+
 	m_pMeshMngr->Print("FPS:");
 	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
 }
@@ -118,7 +137,7 @@ void AppClass::Display(void)
 	matrix4 m4View = m_pCameraMngr->GetViewMatrix();
 	matrix4 m4Model = m_pMeshMngr->GetModelMatrix("Steve") * glm::translate(m_pSphere1->GetCenter());
 
-	m_pSphere1->Render(m4Projection, m4View, m4Model);
+	//m_pSphere1->Render(m4Projection, m4View, m4Model);
 
 
 
@@ -126,10 +145,8 @@ void AppClass::Display(void)
 	m4View = m_pCameraMngr->GetViewMatrix();
 	m4Model = m_pMeshMngr->GetModelMatrix("Creeper") * glm::translate(m_pSphere2->GetCenter());
 
-	m_pSphere1->Render(m4Projection, m4View, m4Model);
+	//m_pSphere1->Render(m4Projection, m4View, m4Model);
 	
-	
-
 	m_pMeshMngr->Render(); //renders the render list
 
 	m_pGLSystem->GLSwapBuffers(); //Swaps the OpenGL buffers
@@ -137,16 +154,16 @@ void AppClass::Display(void)
 
 void AppClass::Release(void)
 {
-	if (m_pSphere1 != nullptr)
+	if (m_pBox1 != nullptr)
 	{
-		delete m_pSphere1;
-		m_pSphere1 = nullptr;
+		delete m_pBox1;
+		m_pBox1 = nullptr;
 
 	}
-	if (m_pSphere2 != nullptr)
+	if (m_pBox2 != nullptr)
 	{
-		delete m_pSphere2;
-		m_pSphere2 = nullptr;
+		delete m_pBox2;
+		m_pBox2 = nullptr;
 
 	}
 	super::Release(); //release the memory of the inherited fields

@@ -95,6 +95,7 @@ public:
 	bool IsColliding(MyBoundingSphereClass* const a_pOther);
 
 	void UpdatePosition(vector3 v3Input); // will update the position of this bounding sphere in global space
+
 private:
 	/*
 	 Release
