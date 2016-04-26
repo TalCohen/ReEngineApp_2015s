@@ -43,26 +43,6 @@ void AppClass::ProcessKeyboard(void)
 		m_pCameraMngr->MoveVertical(fSpeed);
 #pragma endregion
 
-#pragma region Model Positioning
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		m_v3Position += vector3(-0.1f, 0.0f, 0.0f);
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		m_v3Position += vector3( 0.1f, 0.0f, 0.0f);
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		if(!bModifier)
-			m_v3Position += vector3( 0.0f, 0.1f, 0.0f);
-		else
-			m_v3Position += vector3( 0.0f, 0.0f,-0.1f);
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		if (!bModifier)
-			m_v3Position += vector3( 0.0f,-0.1f, 0.0f);
-		else
-			m_v3Position += vector3( 0.0f, 0.0f, 0.1f);
-#pragma endregion
-
 #pragma region Other Actions
 	ON_KEY_PRESS_RELEASE(Escape, NULL, PostMessage(m_pWindow->GetHandler(), WM_QUIT, NULL, NULL));
 	ON_KEY_PRESS_RELEASE(F1, NULL, m_pCameraMngr->SetCameraMode(CAMPERSP));

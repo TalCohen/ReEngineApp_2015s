@@ -486,7 +486,7 @@ void MyPrimitive::GenerateSphere(float a_fRadius, int a_nSubdivisions, vector3 a
 	Release();
 	Init();
 
-	float fValue = 0.5f;
+	float fValue = 1.0f;
 	vector3 pointA(-fValue, -fValue, fValue); //0
 	vector3 pointB(fValue, -fValue, fValue); //1
 	vector3 pointC(-fValue, fValue, fValue); //2

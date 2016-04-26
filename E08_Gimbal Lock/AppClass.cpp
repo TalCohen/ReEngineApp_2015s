@@ -51,7 +51,7 @@ void AppClass::Display(void)
 {
 	//clear the screen
 	ClearScreen();
-	m_pMeshMngr->AddGridToQueue(1.0f, REAXIS::XY); //renders the XY grid with a 100% scale
+	m_pMeshMngr->AddGridToRenderList(1.0f, REAXIS::XY); //renders the XY grid with a 100% scale
 
 	m_pMeshMngr->Render(); //renders the list of meshes in the system.
 
