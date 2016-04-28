@@ -45,6 +45,10 @@ void AppClass::InitVariables(void)
 	m_pBoxT->SetModelMatrix(glm::translate(vector3(0, 5, 0)));
 	m_pBoxB->SetModelMatrix(glm::translate(vector3(0, -5, 0)));
 	m_pBoxR->SetModelMatrix(glm::translate(vector3(10.5, 0, 0)));
+	m_pBoxL->SetModelMatrix(glm::translate(vector3(-10.5, 0, 0)));
+
+	m_pPalletL->SetModelMatrix(glm::translate(vector3(-9.5, 0, 0)));
+	m_pPalletR->SetModelMatrix(glm::translate(vector3(9.5, 0, 0)));
 }
 
 void AppClass::Update(void)
@@ -78,6 +82,33 @@ void AppClass::Update(void)
 		v3Velocity.x *= -1;
 		m_pBall->SetVelocity(v3Velocity);
 	}
+	if (m_pBall->IsColliding(m_pBoxL))
+	{
+		vector3 v3Velocity = m_pBall->GetVelocity();
+		v3Velocity.x *= -1;
+		m_pBall->SetVelocity(v3Velocity);
+	}
+	if (m_pBall->IsColliding(m_pBoxB))
+	{
+		vector3 v3Velocity = m_pBall->GetVelocity();
+		v3Velocity.y *= -1;
+		m_pBall->SetVelocity(v3Velocity);
+	}
+	if (m_pBall->IsColliding(m_pPalletL))
+	{
+		vector3 v3Velocity = m_pBall->GetVelocity();
+		v3Velocity.x *= -1;
+		m_pBall->SetVelocity(v3Velocity);
+	}
+	if (m_pBall->IsColliding(m_pPalletR))
+	{
+		vector3 v3Velocity = m_pBall->GetVelocity();
+		v3Velocity.x *= -1;
+		m_pBall->SetVelocity(v3Velocity);
+	}
+	
+
+	
 
 	//Add objects to the render list
 	m_pBall->AddToRenderList(true);
